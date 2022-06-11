@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { AiFillInfoCircle, AiFillCloseCircle } from 'react-icons/ai';
+import { connect } from 'react-redux';
+import { actionToggleCompleteTask } from '../../redux/actions';
 
 const Container = styled.div`
   display: flex;
@@ -62,7 +64,7 @@ const Container = styled.div`
   }
 `;
 
-export default class Task extends Component {
+class Task extends Component {
   state = { showDescription: false };
 
   ToggleShowDescription = () => {
@@ -72,10 +74,14 @@ export default class Task extends Component {
   };
 
   render() {
-    const { title, description, isComplete } = this.props;
+    const { id, title, description, isComplete, handleCompleteTask } =
+      this.props;
     const { showDescription } = this.state;
     return (
-      <Container onDoubleClick={() => console.log('click')} isComplete={isComplete}>
+      <Container
+        onDoubleClick={() => handleCompleteTask(id)}
+        isComplete={isComplete}
+      >
         <div className="div-title">
           <p className="title">{title}</p>
           <div className="icons">
@@ -92,12 +98,14 @@ export default class Task extends Component {
           </div>
         </div>
 
-        {showDescription && (
-          <div className="descriprion">
-            <p className="description">{description}</p>
-          </div>
-        )}
+        {showDescription && <p className="description">{description}</p>}
       </Container>
     );
   }
 }
+
+const mapDispatchToProps = (dispatch) => ({
+  handleCompleteTask: (id) => dispatch(actionToggleCompleteTask(id)),
+});
+
+export default connect(null, mapDispatchToProps)(Task);
