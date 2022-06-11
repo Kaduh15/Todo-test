@@ -41,7 +41,6 @@ const Wrapper = styled.section`
     font-weight: 400;
     font-size: 48px;
     line-height: 58px;
-    /* identical to box height */
 
     display: flex;
     align-items: flex-start;

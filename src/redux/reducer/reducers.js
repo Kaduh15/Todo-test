@@ -1,4 +1,4 @@
-import { ADD_TASK, TOGGLE_COMPLETE_TASK, UPDATE_DESCRIPTION } from '../actions';
+import { ADD_TASK, TOGGLE_COMPLETE_TASK, UPDATE_DESCRIPTION, DELETE_TASK } from '../actions';
 
 const INITIAL_STATE_TASKS = [];
 
@@ -13,6 +13,11 @@ const reducerTasks = (preventState = INITIAL_STATE_TASKS, action) => {
     case UPDATE_DESCRIPTION:
       taskFilter.description = action.description;
       return [...preventState];
+    case DELETE_TASK:
+      const taskFilterDelete = preventState.filter(task => task.id !== action.id);
+      return [
+        ...taskFilterDelete
+      ]
     default:
       return preventState;
   }

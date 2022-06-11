@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { AiFillInfoCircle, AiFillCloseCircle } from 'react-icons/ai';
 import { connect } from 'react-redux';
-import { actionToggleCompleteTask, actionUpdateDescription } from '../../redux/actions';
+import { actionToggleCompleteTask, actionUpdateDescription, actionDeleteTask } from '../../redux/actions';
 import Button from '../Button';
 
 const Container = styled.div`
@@ -67,7 +67,6 @@ const Container = styled.div`
     background-color: ${(props) =>
       props.editDescription ? '#0F110F' : 'transparent'};
     color: #fff;
-    resize: none;
   }
 
   .div-description {
@@ -114,14 +113,13 @@ class Task extends Component {
   saveDescriptionInStore = () => {
   const { handleUpdateDescriptionTask, id} = this.props;
   const {editDescription, textDescription} = this.state;
-  console.log(editDescription);
   if (editDescription) {
     handleUpdateDescriptionTask(id, textDescription)
   }
   }
 
   render() {
-    const { id, title, isComplete, handleCompleteTask } =
+    const { id, title, isComplete, handleCompleteTask, deleteTask } =
       this.props;
     const { showDescription, editDescription, textDescription } = this.state;
     return (
@@ -140,7 +138,7 @@ class Task extends Component {
             >
               <AiFillInfoCircle />
             </button>
-            <button className="btn" type="button">
+            <button className="btn" type="button" onClick={() => deleteTask(id)}>
               <AiFillCloseCircle />
             </button>
           </div>
@@ -149,6 +147,7 @@ class Task extends Component {
         {showDescription && (
           <div className="div-description">
             <textarea
+              style={{resize: 'none'}}
               readOnly={!editDescription}
               className="description-area"
               name="textDescription"
@@ -172,6 +171,7 @@ class Task extends Component {
 const mapDispatchToProps = (dispatch) => ({
   handleCompleteTask: (id) => dispatch(actionToggleCompleteTask(id)),
   handleUpdateDescriptionTask: (id, description) => dispatch(actionUpdateDescription(id, description)),
+  deleteTask: (id) => dispatch(actionDeleteTask(id)),
 });
 
 export default connect(null, mapDispatchToProps)(Task);
