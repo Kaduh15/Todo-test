@@ -2,9 +2,12 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { AiFillInfoCircle, AiFillCloseCircle } from 'react-icons/ai';
 import { connect } from 'react-redux';
-import { actionToggleCompleteTask } from '../../redux/actions';
+import { actionToggleCompleteTask, actionUpdateDescription } from '../../redux/actions';
+import Button from '../Button';
 
 const Container = styled.div`
+  ${(props) => console.log(props)}
+
   display: flex;
   flex-direction: column;
 
@@ -45,12 +48,13 @@ const Container = styled.div`
     color: ${(props) => (props.isComplete ? '#12CC3B' : '#AA2C2C')};
   }
 
-  .description {
+  .description,
+  .description-area {
     width: 891px;
     height: 287px;
 
     padding: 19px 30px;
-    margin-top: 30px;
+    margin: 30px 0;
 
     border-width: 5px 0px;
     border-style: solid;
@@ -61,11 +65,35 @@ const Container = styled.div`
     font-weight: 400;
     font-size: 24px;
     line-height: 29px;
+    background-color: ${(props) =>
+      props.editDescription ? '#0F110F' : 'transparent'};
+    color: #fff;
+    resize: none;
+  }
+
+  .div-description {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
 `;
 
 class Task extends Component {
-  state = { showDescription: false };
+  state = {
+    textDescription: '',
+    showDescription: false,
+    editDescription: false,
+  };
+
+  componentDidMount() {
+    const { description } = this.props;
+    this.setState({ textDescription: description });
+  }
+
+  handleChange = (event) => {
+    this.setState({ [event.target.name]: event.target.value });
+  };
 
   ToggleShowDescription = () => {
     const { showDescription } = this.state;
@@ -73,14 +101,26 @@ class Task extends Component {
     this.setState({ showDescription: !showDescription });
   };
 
+  ToggleEditDescription = () => {
+    const { editDescription } = this.state;
+    if (!editDescription) {
+      document
+        .querySelector('#root > main > div > div.div-description > textarea')
+        .focus();
+    }
+
+    this.setState({ editDescription: !editDescription });
+  };
+
   render() {
-    const { id, title, description, isComplete, handleCompleteTask } =
+    const { id, title, isComplete, handleCompleteTask, handleUpdateDescriptionTask } =
       this.props;
-    const { showDescription } = this.state;
+    const { showDescription, editDescription, textDescription } = this.state;
     return (
       <Container
         onDoubleClick={() => handleCompleteTask(id)}
         isComplete={isComplete}
+        editDescription={editDescription}
       >
         <div className="div-title">
           <p className="title">{title}</p>
@@ -98,7 +138,26 @@ class Task extends Component {
           </div>
         </div>
 
-        {showDescription && <p className="description">{description}</p>}
+        {showDescription && (
+          <div className="div-description">
+            <textarea
+              readOnly={!editDescription}
+              className="description-area"
+              name="textDescription"
+              onChange={this.handleChange}
+              value={textDescription}
+            />
+
+            <Button onClick={() => {
+              if (editDescription) {
+                handleUpdateDescriptionTask(id, textDescription)
+              }
+              this.ToggleEditDescription()
+              }}>
+              {editDescription ? 'Salvar' : 'Editar'}
+            </Button>
+          </div>
+        )}
       </Container>
     );
   }
@@ -106,6 +165,7 @@ class Task extends Component {
 
 const mapDispatchToProps = (dispatch) => ({
   handleCompleteTask: (id) => dispatch(actionToggleCompleteTask(id)),
+  handleUpdateDescriptionTask: (id, description) => dispatch(actionUpdateDescription(id, description)),
 });
 
 export default connect(null, mapDispatchToProps)(Task);
