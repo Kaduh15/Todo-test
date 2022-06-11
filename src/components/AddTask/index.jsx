@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
+import { actionAddTask } from '../../redux/actions';
 
 const Wrapper = styled.section`
   display: flex;
@@ -77,7 +79,7 @@ const Wrapper = styled.section`
   }
 `;
 
-export default class AddTask extends Component {
+class AddTask extends Component {
   state = {
     inputAddTask: '',
   };
@@ -88,6 +90,7 @@ export default class AddTask extends Component {
 
   render() {
     const { inputAddTask } = this.state;
+    const { handleAddTask } = this.props;
 
     return (
       <Wrapper>
@@ -101,10 +104,16 @@ export default class AddTask extends Component {
               onChange={this.handleChange}
               value={inputAddTask}
             />
-            <input type="button" value="adicionar" />
+            <input type="button" value="adicionar" onClick={() => handleAddTask(inputAddTask)}/>
           </div>
         </label>
       </Wrapper>
     );
   }
 }
+
+const mapDispatchToProps = (dispatch) => ({
+  handleAddTask: (text) => dispatch(actionAddTask(text)),
+});
+
+export default connect(null, mapDispatchToProps)(AddTask);
