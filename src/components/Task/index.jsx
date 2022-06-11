@@ -6,7 +6,6 @@ import { actionToggleCompleteTask, actionUpdateDescription } from '../../redux/a
 import Button from '../Button';
 
 const Container = styled.div`
-  ${(props) => console.log(props)}
 
   display: flex;
   flex-direction: column;
@@ -112,8 +111,17 @@ class Task extends Component {
     this.setState({ editDescription: !editDescription });
   };
 
+  saveDescriptionInStore = () => {
+  const { handleUpdateDescriptionTask, id} = this.props;
+  const {editDescription, textDescription} = this.state;
+  console.log(editDescription);
+  if (editDescription) {
+    handleUpdateDescriptionTask(id, textDescription)
+  }
+  }
+
   render() {
-    const { id, title, isComplete, handleCompleteTask, handleUpdateDescriptionTask } =
+    const { id, title, isComplete, handleCompleteTask } =
       this.props;
     const { showDescription, editDescription, textDescription } = this.state;
     return (
@@ -149,9 +157,7 @@ class Task extends Component {
             />
 
             <Button onClick={() => {
-              if (editDescription) {
-                handleUpdateDescriptionTask(id, textDescription)
-              }
+              this.saveDescriptionInStore()
               this.ToggleEditDescription()
               }}>
               {editDescription ? 'Salvar' : 'Editar'}
