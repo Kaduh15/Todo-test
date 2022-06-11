@@ -1,12 +1,17 @@
+import React, { Component } from 'react';
+import styled from 'styled-components';
 
-import './App.css';
+const Main = styled.main`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 
-function App() {
-  return (
-    <div className="App">
-      Hello world!
-    </div>
-  );
+  background: #031a04;
+`;
+
+export default class App extends Component {
+  render() {
+    return <Main>App</Main>;
+  }
 }
-
-export default App;
