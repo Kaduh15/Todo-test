@@ -9,6 +9,11 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
   }
 
+  /* body {
+    background: #031a04;
+    color: #fff;
+  } */
+
   #root {
     display: flex;
     justify-content: center;
