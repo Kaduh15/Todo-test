@@ -4,15 +4,15 @@ const GlobalStyle = createGlobalStyle`
   * {
     margin: 0;
     padding: 0;
-    font-family: Open-Sans, Helvetica, Sans-Serif;
+    font-family: 'Roboto', Helvetica, Sans-Serif;
 
     box-sizing: border-box;
   }
 
-  /* body {
-    background: #031a04;
-    color: #fff;
-  } */
+  html, body, #root {
+    min-width: 100vh;
+    min-height: 100vh;
+  }
 
   #root {
     display: flex;
@@ -20,11 +20,11 @@ const GlobalStyle = createGlobalStyle`
     align-items: center;
   }
 
-  textarea:focus, input:focus, select:focus {
+  textarea:focus, input:focus, select:focus, input, button {
     box-shadow: 0 0 0 0;
     border: 0 none;
     outline: 0;
-} 
+}
 `;
 
 export default GlobalStyle;
